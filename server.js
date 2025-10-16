@@ -11,13 +11,26 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+
+// Whitelist frontend domains
+const allowedOrigins = [
+  "http://localhost:3000",               // dev
+  "https://vasundara.netlify.app"        // deployed frontend
+];
+
+
 app.use(cors({
-  origin: [
-    "https://vasundara.netlify.app/", // your deployed frontend
-    "http://localhost:3000"          // local dev frontend
-  ],
-  methods: ["GET","POST","PATCH","DELETE","OPTIONS"],
-  credentials: true
+  origin: function(origin, callback){
+    // allow requests with no origin (like Postman)
+    if(!origin) return callback(null, true);
+    if(allowedOrigins.indexOf(origin) === -1){
+      const msg = `The CORS policy for this site does not allow access from the specified Origin.`;
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true,
+  methods: ["GET","POST","PATCH","DELETE","OPTIONS"]
 }));
 
 app.use(express.json());
