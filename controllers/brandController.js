@@ -122,6 +122,26 @@ export const updateBrand = async (req, res) => {
       }
     }
 
+    // 5️⃣ Delete vehicles if requested
+    if (req.body.vehiclesToDelete) {
+      let vehiclesToDelete = [];
+      try {
+        vehiclesToDelete = JSON.parse(req.body.vehiclesToDelete);
+      } catch (err) {
+        console.warn("vehiclesToDelete parse error:", err);
+      }
+
+      for (let vId of vehiclesToDelete) {
+        const vehicle = await Vehicle.findById(vId);
+        if (vehicle) {
+          if (vehicle.image) deleteImage(vehicle.image);
+          await Vehicle.deleteOne({ _id: vehicle._id });
+          // Or soft delete: vehicle.is_deleted = true; await vehicle.save();
+        }
+      }
+    }
+
+
     res.json({ message: 'Brand and vehicles updated successfully' });
   } catch (err) {
     console.error(err);
