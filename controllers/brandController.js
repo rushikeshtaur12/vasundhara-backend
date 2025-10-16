@@ -161,11 +161,11 @@ export const softDeleteBrand = async (req, res) => {
     if (!brand) return res.status(404).json({ message: 'Brand not found' });
 
     // Mark brand as deleted
-    brand.is_deleted = true;
+    brand.is_exist = false;
     await brand.save();
 
     // Mark all vehicles as deleted
-    await Vehicle.updateMany({ brandId }, { $set: { is_deleted: true } });
+    await Vehicle.updateMany({ brandId }, { $set: { is_exist: false } });
 
     res.json({ message: 'Brand and associated vehicles soft deleted' });
   } catch (err) {

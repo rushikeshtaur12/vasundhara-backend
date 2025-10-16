@@ -6,6 +6,8 @@ const brandSchema = new mongoose.Schema({
   is_exist: { type: Boolean, required: true },
   country: { type: String, required: true },
   image: { type: String },
+  
+
 }, { timestamps: true });
 
 export default mongoose.model('Brand', brandSchema);
