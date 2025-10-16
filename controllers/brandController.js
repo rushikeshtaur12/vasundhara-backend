@@ -85,30 +85,40 @@ export const updateBrand = async (req, res) => {
 
     await brand.save();
 
-    // 4️⃣ Update vehicles if provided
+    // 4️⃣ Update or create vehicles
     if (vehicles) {
-      const parsedVehicles = JSON.parse(vehicles); // vehicles array
+      const parsedVehicles = JSON.parse(vehicles);
 
       for (let v of parsedVehicles) {
-        if (!v.id) continue;
-        const vehicle = await Vehicle.findById(v.id);
-        if (!vehicle) continue;
-
-        if (v.name !== undefined) vehicle.name = v.name;
-        if (v.price !== undefined) vehicle.price = Number(v.price);
-
-        if (v.color !== undefined) {
-          vehicle.color = typeof v.color === 'string' ? JSON.parse(v.color) : v.color;
-        }
-
-        // Update vehicle image if provided
         const vehicleFile = req.files?.[`vehicleImage_${v.tempId}`];
-        if (vehicleFile) {
-          if (vehicle.image) deleteImage(vehicle.image);
-          vehicle.image = vehicleFile[0].path;
-        }
 
-        await vehicle.save();
+        if (v.id) {
+          // Update existing vehicle
+          const vehicle = await Vehicle.findById(v.id);
+          if (!vehicle) continue;
+
+          if (v.name !== undefined) vehicle.name = v.name;
+          if (v.price !== undefined) vehicle.price = Number(v.price);
+          if (v.color !== undefined) vehicle.color = Array.isArray(v.color) ? v.color : JSON.parse(v.color);
+
+          if (vehicleFile) {
+            if (vehicle.image) deleteImage(vehicle.image);
+            vehicle.image = vehicleFile[0].path;
+          }
+
+          await vehicle.save();
+        } else {
+          // Create new vehicle
+          const newVehicle = new Vehicle({
+            brandId: brand._id,
+            name: v.name,
+            price: Number(v.price),
+            color: Array.isArray(v.color) ? v.color : JSON.parse(v.color || "[]"),
+            image: vehicleFile ? vehicleFile[0].path : null,
+          });
+
+          await newVehicle.save();
+        }
       }
     }
 
@@ -118,6 +128,7 @@ export const updateBrand = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
 
 
 // Delete Brand + Vehicles
