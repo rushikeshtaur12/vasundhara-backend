@@ -17,7 +17,8 @@ export const createBrand = async (req, res) => {
       year,
       is_exist,
       country,
-      image: req.files?.brandImage ? req.files.brandImage[0].path : null
+      image: req.files?.brandImage ? req.files.brandImage[0].filename : null // ✅ only filename
+
     });
     await brand.save();
 
@@ -31,7 +32,8 @@ export const createBrand = async (req, res) => {
           name: v.name,
           color: v.color,
           price: v.price,
-          image: vehicleFile ? vehicleFile[0].path : null
+          image: vehicleFile ? vehicleFile[0].filename : null // ✅ use filename
+
         });
         await vehicle.save();
         vehiclesData.push(vehicle);
@@ -80,7 +82,7 @@ export const updateBrand = async (req, res) => {
     // 3️⃣ Update brand image if provided
     if (req.files?.brandImage) {
       if (brand.image) deleteImage(brand.image);
-      brand.image = req.files.brandImage[0].path;
+brand.image = req.files.brandImage[0].filename; // ✅ use filename instead of path
     }
 
     await brand.save();
@@ -103,7 +105,8 @@ export const updateBrand = async (req, res) => {
 
           if (vehicleFile) {
             if (vehicle.image) deleteImage(vehicle.image);
-            vehicle.image = vehicleFile[0].path;
+            vehicle.image = vehicleFile[0].filename; // ✅ use filename
+
           }
 
           await vehicle.save();
@@ -114,7 +117,8 @@ export const updateBrand = async (req, res) => {
             name: v.name,
             price: Number(v.price),
             color: Array.isArray(v.color) ? v.color : JSON.parse(v.color || "[]"),
-            image: vehicleFile ? vehicleFile[0].path : null,
+            image: vehicleFile ? vehicleFile[0].filename : null // ✅ use filename
+
           });
 
           await newVehicle.save();
