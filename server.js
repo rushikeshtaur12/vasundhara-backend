@@ -11,7 +11,15 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: [
+    "https://vasundara.netlify.app/", // your deployed frontend
+    "http://localhost:3000"          // local dev frontend
+  ],
+  methods: ["GET","POST","PATCH","DELETE","OPTIONS"],
+  credentials: true
+}));
+
 app.use(express.json());
 app.use(morgan("combined"))
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
