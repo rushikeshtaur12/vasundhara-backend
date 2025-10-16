@@ -4,77 +4,96 @@
 
 This backend handles Brand + Vehicle CRUD operations with image upload functionality using multer.
 It supports both local and deployed (Railway) environments, managing image files and API data in MongoDB.
+## ⚙️ Tech Stack
 
-⚙️ Tech Stack
+**Server & REST API:** Node.js + Express.js 
 
-Node.js + Express.js — Server & REST API
+**Database:** MongoDB + Mongoose 
 
-MongoDB + Mongoose — Database
+**Image handel:** Multer 
 
-Multer — Image uploads
+**Cross-origin support:** CORS 
 
-CORS — Cross-origin support
+**Environment variable management:** dotenv
 
-dotenv — Environment variable management
-
-Railway — Cloud deployment
-
-
-📦 Folder Structure
-
-backend/
-│
-├── server.js                # Main entry point
-├── .env                     # Environment variables
-├── package.json
-│
-├── models/
-│   ├── Brand.js
-│   └── Vehicle.js
-│
-├── controllers/
-│   └── brandController.js   # CRUD logic for brands & vehicles
-│
-├── routes/
-│   └── brandRoutes.js       # Express routes
-│
-├── uploads/                 # Uploaded images (auto-created)
-│
-└── config/
-    └── db.js                # MongoDB connection
+**Debug Log:** Morgan 
 
 
+
+## Run Locally
 ⚙️ Installation & Setup
 
-1️⃣ Clone the Repository
+Clone the project
 
-git clone https://github.com/<your-username>/vasundhara-vehicle-backend.git
-cd vasundhara-vehicle-backend
+```bash
+https://github.com/rushikeshtaur12/vasundhara-backend
 
-2️⃣ Install Dependencies
-npm install
+```
 
-3️⃣ Create .env File
+Go to the project directory
 
+```bash
+  cd vasundhara-backend
+```
+
+Install dependencies
+
+```bash
+  npm install
+```
+
+
+Create .env File and configure
+
+```bash
 PORT=5000
 MONGO_URI=mongodb+srv://<your-db-user>:<password>@cluster.mongodb.net/vasundhara
-CLIENT_URL=http://localhost:5173
+
+```
 
 
-4️⃣ Run the Server
-
-npm run dev
-
+Start the server
+```bash
+  npm run dev
+```
 
 The API will run at:
+```bash
 👉 http://localhost:5000
+```
+## Folder Structure
 
+
+
+backend/
+
+
+├─ server.js # Main entry point of the backend
+
+├── package.json # Project dependencies and scripts
+├── .env # Environment variables (MongoDB URI, PORT, etc.)
+│
+├── config/
+│ └── db.js # MongoDB connection setup
+│
+├── models/
+│ ├── Brand.js # Brand Mongoose schema
+│ └── Vehicle.js # Vehicle Mongoose schema
+│
+├── controllers/
+│ └── brandController.js # CRUD logic for brands & vehicles
+│
+├── routes/
+│ └── brandRoutes.js # Express routes for brand & vehicle APIs
+│
+├── uploads/ # Directory for uploaded images (auto-created)
+│
+└── utils/ # Optional: helper functions (like deleteImage.js)
+## Endpoint
 
 | Method     | Endpoint                           | Description                           |
 | ---------- | ---------------------------------- | ------------------------------------- |
-| **POST**   | `/api/brands`                      | Create brand + vehicles (with images) |
+| **POST**   | `/api/brands/create`                      | Create brand + vehicles (with images) |
 | **GET**    | `/api/brands`                      | Get all brands with their vehicles    |
-| **PUT**    | `/api/brands/:brandId`             | Update brand + vehicles               |
+| **PATCH**    | `/api/brands/:brandId`             | Update brand + vehicles               |
 | **DELETE** | `/api/brands/:brandId`             | Delete brand and its vehicles         |
-| **PATCH**  | `/api/brands/soft-delete/:brandId` | Soft delete brand                     |
-
