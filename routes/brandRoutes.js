@@ -18,34 +18,18 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// Routes
-router.post(
-  '/create',
-  upload.fields([
-    { name: 'brandImage', maxCount: 1 },
-    { name: 'vehicleImage_0', maxCount: 1 },
-    { name: 'vehicleImage_1', maxCount: 1 },
-    { name: 'vehicleImage_2', maxCount: 1 },
-    { name: 'vehicleImage_3', maxCount: 1 }
-  ]),
-  createBrand
-);
+// ------------------------- CREATE BRAND + VEHICLES + HANDEL MULTIPLE IMAGE -------------------------
+router.post('/create', upload.any(), createBrand);
 
+// ------------------------- GET ALL Brands -------------------------
 router.get('/', getAllBrands);
+// ------------------------- UPDATE  BRAND + VEHICLES  -------------------------
+router.patch('/:brandId', upload.any(), updateBrand);
 
-router.patch(
-  '/:brandId',
-  upload.fields([
-    { name: 'brandImage', maxCount: 1 },
-    { name: 'vehicleImage_0', maxCount: 1 },
-    { name: 'vehicleImage_1', maxCount: 1 },
-    { name: 'vehicleImage_2', maxCount: 1 },
-    { name: 'vehicleImage_3', maxCount: 1 }
-  ]),
-  updateBrand
-);
-
+// ------------------------- HARD DELETE  BRAND + VEHICLES  -------------------------
 router.delete('/:brandId', deleteBrand);
+
+// ------------------------- SOFT DELETE  BRAND + VEHICLES  -------------------------
 router.patch('/soft/:brandId', softDeleteBrand);
 
 export default router;

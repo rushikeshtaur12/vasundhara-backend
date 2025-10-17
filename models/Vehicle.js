@@ -6,8 +6,6 @@ const vehicleSchema = new mongoose.Schema({
   color: [{ type: String }],
   price: { type: Number, required: true },
   image: { type: String },
-   
-
 }, { timestamps: true });
 
 export default mongoose.model('Vehicle', vehicleSchema);
